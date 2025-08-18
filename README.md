@@ -32,3 +32,8 @@ A dedicated service account was created with the following roles to ensure smoot
 
 ## 4. Integration with StarRocks  
 StarRocks connects to the transformed data in GCS using **External Tables**, allowing for efficient querying and further analytical processing.  
+
+## 5. Superset Connection  
+Superset is connected to StarRocks through the **Superset Database Connector**.  
+- Configure the connection string within Superset (using SQLAlchemy-style URI).  
+- Once connected, datasets and external tables from StarRocks can be easily explored and visualized directly in Superset.  
