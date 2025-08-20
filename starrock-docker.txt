@@ -20,26 +20,43 @@
 					
 3. Build images					
 	docker build -t starrocks-gcs .				
-					
+4. Create swith-key.sh in service_account folder:
+
+#!/bin/bash
+KEY_FILE=$1
+if [ -z "$KEY_FILE" ]; then
+  echo "❌ Please provide a key file, e.g.: switch-key.sh annoying-puzzle.json"
+  exit 1
+fi
+
+FULL_PATH="/root/service_account/$KEY_FILE"
+
+if [ ! -f "$FULL_PATH" ]; then
+  echo "❌ Key file not found: $FULL_PATH"
+  exit 1
+fi
+
+echo "🔑 Switching to key: $FULL_PATH"
+gcloud auth activate-service-account --key-file="$FULL_PATH"
+
+gcloud auth list
+
 4. Run container and service account:				
 	Let's say your JSON service account is located at: C:\Users\PC\Downloads\annoying-puzzle.json
 					
-	docker run -d \				
-	  --name starrocks-gcs \				
-	  -p 8030:8030 \				
-	  -p 8040:8040 \				
-	  -p 9050:9050 \				
-	  -v C:/Users/PC/Downloads/annoying-puzzle.json:/root/key.json \				
-	  starrocks-gcs				
+docker run -d \
+  --name starrocks-gcs \
+  -p 8030:8030 \
+  -p 8040:8040 \
+  -p 9050:9050 \
+  -v C:/Users/PC/Downloads/service_account:/root/service_account \
+  starrocks-gcs
 					
-5. Configure permissions in the container:
-	docker exec -it starrocks-gcs bash				
-	gcloud auth activate-service-account --key-file=/root/key.json				
-	gcloud config set project $(cat /root/key.json | grep project_id | cut -d '"' -f4)				
-					
-6. Test connector:					
-	curl -I https://storage.googleapis.com				
-	gcloud storage ls gs://annoying-puzzle-export-demo 				
+5. Switch key if you want:
+access container:
+docker exec -it starrocks-gcs bash 
+swtich key: 
+bash /root/service_account/switch-key.sh annoying-puzzle.json
 					
 7. Demo Create External Tables in Starrocks:					
 	CREATE EXTERNAL TABLE ext_transformed_events3 (				
@@ -78,4 +95,5 @@
 					
 					
 					
+
 					
