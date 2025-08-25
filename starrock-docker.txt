@@ -90,7 +90,7 @@ bash /root/service_account/switch-key.sh annoying-puzzle.json
 8. Load local:
 CREATE TABLE sticker_internal AS
 SELECT * FROM FILES (
-  "path" = "gs://sticker-room-c335b-export-demo/transformed/events_*/**.parquet",
+  "path" = "gs://brain-puzzle-tricky-test-export-demo/transformed/events_*/**.parquet",
   "format" = "parquet",
   "gcp.gcs.service_account_email" = "XXX",
   "gcp.gcs.service_account_private_key_id" = "YYY",
@@ -106,4 +106,5 @@ SELECT * FROM FILES (
 					
 
 					
+
 
