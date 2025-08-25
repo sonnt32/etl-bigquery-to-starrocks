@@ -87,7 +87,16 @@ bash /root/service_account/switch-key.sh annoying-puzzle.json
 					
 	SELECT event_date from ext_transformed_events10;				
 					
-					
+8. Load local:
+CREATE TABLE sticker_internal AS
+SELECT * FROM FILES (
+  "path" = "gs://sticker-room-c335b-export-demo/transformed/events_*/**.parquet",
+  "format" = "parquet",
+  "gcp.gcs.service_account_email" = "XXX",
+  "gcp.gcs.service_account_private_key_id" = "YYY",
+  "gcp.gcs.service_account_private_key" = "ZZZ"
+);
+
 					
 					
 					
@@ -97,3 +106,4 @@ bash /root/service_account/switch-key.sh annoying-puzzle.json
 					
 
 					
+
