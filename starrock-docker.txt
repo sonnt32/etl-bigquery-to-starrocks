@@ -62,6 +62,11 @@ docker run -d \
 5. Switch key if you want:
 access container:
 docker exec -it starrocks-gcs bash 
+
+apt-get update && apt-get install -y dos2unix
+dos2unix /root/service_account/switch-key.sh
+
+
 swtich key: 
 bash /root/service_account/switch-key.sh annoying-puzzle.json
 					
@@ -113,6 +118,7 @@ SELECT * FROM FILES (
 					
 
 					
+
 
 
 
