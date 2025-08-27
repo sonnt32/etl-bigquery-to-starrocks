@@ -43,13 +43,20 @@ gcloud auth list
 
 4. Run container and service account:				
 	Let's say your JSON service account is located at: C:\Users\PC\Downloads\annoying-puzzle.json
-					
+
+docker volume create starrocks_fe_meta
+docker volume create starrocks_be_storage
+
 docker run -d \
   --name starrocks-gcs \
-  -p 8030:8030 \
-  -p 8040:8040 \
-  -p 9050:9050 \
-  -v C:/Users/PC/Downloads/service_account:/root/service_account \
+  -h starrocks-fe \                           
+  -p 8030:8030 \                               
+  -p 9030:9030 \                            
+  -p 8040:8040 \                               
+  -p 9050:9050 -p 9060:9060 \                  
+  -v starrocks_fe_meta:/data/deploy/starrocks/fe/meta \
+  -v starrocks_be_storage:/data/deploy/starrocks/be/storage \
+  -v /c/Users/PC/Downloads/service_account:/root/service_account \
   starrocks-gcs
 					
 5. Switch key if you want:
@@ -106,5 +113,6 @@ SELECT * FROM FILES (
 					
 
 					
+
 
 
