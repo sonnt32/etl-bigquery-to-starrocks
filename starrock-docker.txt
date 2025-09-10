@@ -75,13 +75,13 @@ bash /root/service_account/switch-key.sh annoying-puzzle.json
 	event_timestamp DATETIME,				
 	event_name STRING,				
 	user_pseudo_id STRING,				
-	event_params STRING,				
-	user_properties STRING,				
-	geo STRING,				
-	device STRING,				
-	app_info STRING,				
+	event_params JSON,				
+	user_properties JSON,				
+	geo JSON,				
+	device JSON,				
+	app_info JSON,				
 	platform STRING,				
-	traffic_source STRING,				
+	traffic_source JSON,				
 	event_value_in_usd DOUBLE,				
 	retention_day INT				
 	)				
@@ -99,24 +99,44 @@ bash /root/service_account/switch-key.sh annoying-puzzle.json
 	SELECT event_date from ext_transformed_events10;				
 					
 8. Load local:
-CREATE TABLE sticker_internal AS
-SELECT * FROM FILES (
-  "path" = "gs://brain-puzzle-tricky-test-export-demo/transformed/events_*/**.parquet",
+CREATE TABLE BRAINY_INTERNAL (
+    event_date STRING,
+    user_pseudo_id STRING,
+    event_name STRING,
+    event_timestamp STRING,
+    event_params JSON,
+    user_properties JSON,
+    geo JSON,
+    device JSON,
+    app_info JSON,
+    platform STRING,
+    traffic_source JSON,
+    event_value_in_usd DOUBLE,
+    retention_day INT
+)
+DUPLICATE KEY(event_date, user_pseudo_id, event_name)
+DISTRIBUTED BY HASH(user_pseudo_id) BUCKETS 16
+PROPERTIES ("replication_num" = "1");
+
+
+INSERT INTO BRAINY_INTERNAL
+SELECT *
+FROM FILES (
+  "path" = "gs://brain-puzzle-tricky-test-export-demo/transformed/events_20250904/*.parquet",
   "format" = "parquet",
-  "gcp.gcs.service_account_email" = "XXX",
-  "gcp.gcs.service_account_private_key_id" = "YYY",
-  "gcp.gcs.service_account_private_key" = "ZZZ"
-);
+"gcp.gcs.service_account_email" = "XXX",
+"gcp.gcs.service_account_private_key_id" = "YYY",
+"gcp.gcs.service_account_private_key" = "ZZZ")
+ 
 
 					
 					
 					
 					
 					
-					
-					
 
 					
+
 
 
 
