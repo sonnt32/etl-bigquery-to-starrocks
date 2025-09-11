@@ -1,6 +1,7 @@
 1. Create project folder					
 	mkdir starrocks-gcs				
-	cd starrocks-gcs				
+	cd starrocks-gcs
+	docker network create starrocks-net
 					
 					
 2. Dockerfile					
@@ -47,13 +48,9 @@ gcloud auth list
 docker volume create starrocks_fe_meta
 docker volume create starrocks_be_storage
 
-docker run -d \
-  --name starrocks-gcs \
-  -h starrocks-fe \                           
-  -p 8030:8030 \                               
-  -p 9030:9030 \                            
-  -p 8040:8040 \                               
-  -p 9050:9050 -p 9060:9060 \                  
+docker run -d --name starrocks-gcs -h starrocks-fe \
+  --network starrocks-net \
+  -p 8030:8030 -p 9030:9030 -p 8040:8040 -p 9050:9050 -p 9060:9060 \
   -v starrocks_fe_meta:/data/deploy/starrocks/fe/meta \
   -v starrocks_be_storage:/data/deploy/starrocks/be/storage \
   -v /c/Users/PC/Downloads/service_account:/root/service_account \
@@ -136,6 +133,7 @@ FROM FILES (
 					
 
 					
+
 
 
 
